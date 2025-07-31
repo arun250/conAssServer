@@ -6,7 +6,7 @@ const session = require("express-session")
 const PORT = process.env.PORT || 5000;
 const token = "4A5N2Tj0a4y5a2sChOrVeEeN0s1p2u3n"
 app.use(cors({
-  origin:"https://covassfront.netlify.app/", credentials:true,
+  origin:"https://covassfront.netlify.app", credentials:true,
 }))
 app.use(express.json())
 
