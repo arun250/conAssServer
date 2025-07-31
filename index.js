@@ -22,16 +22,21 @@ app.use(session({
   }
 }));
 
-app.get("/api", async(req, res) => {
-  const response = await fetch("https://api.covenanttecs.com/api/CRUD_WebAPIs/GetAllUsers", {
-    method: "GET",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    }
-  });
-  const data = await response.json();
-  res.status(200).json(data)
+app.get("/api", async (req, res) => {
+  try {
+    
+    const response = await fetch("https://api.covenanttecs.com/api/CRUD_WebAPIs/GetAllUsers", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+    const data = await response.json();
+    res.status(200).json(data)
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 app.post("/api/register", async (req, res) => {
@@ -61,64 +66,73 @@ app.post("/api/register", async (req, res) => {
     
   })
   
-  app.post("/api/register/edit", async (req, res) => {
-    const userData = req.body
+app.post("/api/register/edit", async (req, res) => {
+  try {
+     const userData = req.body
     const response = await fetch("https://api.covenanttecs.com/api/CRUD_WebAPIs/SaveUser", {
       method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(userData)
-  });
-  const data = await response.json();
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(userData)
+    });
+    const data = await response.json();
     res.status(200).json(data)
-
-  console.log("success")
+    console.log("success")
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 //Delete User
 app.post("/api/register/delete", async (req, res) => {
-  const { Email } = req.body
-  console.log(Email)
-  const response = await fetch("https://api.covenanttecs.com/api/CRUD_WebAPIs/DeleteUserByEmail", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({Email})
-  });
-  const data = await response.json();
-  res.status(200).json(data)
-  console.log(data.message)
+  try {    
+    const { Email } = req.body
+    console.log(Email)
+    const response = await fetch("https://api.covenanttecs.com/api/CRUD_WebAPIs/DeleteUserByEmail", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({Email})
+    });
+    const data = await response.json();
+    res.status(200).json(data)
+    console.log(data.message)
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 
-app.post("/api/login", async(req, res) => {
-  const { email, password } = req.body;
-  //getUserDetails
-  const response = await fetch("https://api.covenanttecs.com/api/CRUD_WebAPIs/GetAllUsers", {
-    method: "GET",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    }
-  });
-  const data = await response.json();
- 
-
-
-  //match Useremail
-  const user = data.users.find(u => u.Email === email)
-  if(!user) return res.status(401).json({error:"User not found"})
-  
-  //match password
-  const isMatch = await bcrypt.compare(password, user.PasswordHash)
-  if(!isMatch) return res.status(401).json({error:"Wrong Password"})
-  
-  req.session.user = { Email: user.Email };
-  res.json({ message: "Login successful" });
+app.post("/api/login", async (req, res) => {
+  try {
+    
+    const { email, password } = req.body;
+    //getUserDetails
+    const response = await fetch("https://api.covenanttecs.com/api/CRUD_WebAPIs/GetAllUsers", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+    const data = await response.json();
+    //match Useremail
+    const user = data.users.find(u => u.Email === email)
+    if(!user) return res.status(401).json({error:"User not found"})
+    
+    //match password
+    const isMatch = await bcrypt.compare(password, user.PasswordHash)
+    if(!isMatch) return res.status(401).json({error:"Wrong Password"})
+    
+    req.session.user = { Email: user.Email };
+    res.json({ message: "Login successful" });
+  } catch (err) {
+    console.log(err)
+  }
 
 })
 
@@ -140,8 +154,6 @@ app.post("/api/logout", (req, res) => {
     res.json({ message: "Logout successful" });
   });
 });
-
-
 
 
 app.listen(PORT);
