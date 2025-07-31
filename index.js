@@ -18,7 +18,7 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly:true,
-    sameSite: "lex",
+    sameSite: "None",
     secure:false,
     maxAge: 1000 * 60 * 30
   }
@@ -130,12 +130,11 @@ app.post("/api/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.PasswordHash)
     if(!isMatch) return res.status(401).json({error:"Wrong Password"})
     
-    req.session.user = { Email: user.Email };
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: false, 
-      sameSite: "None", 
-    });
+  req.session.user = { Email: user.Email };
+req.session.save(() => {
+  res.json({ message: "Login successful" });
+});
+    
     
     res.json({ message: "Login successful" });
 
