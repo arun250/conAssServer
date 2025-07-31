@@ -3,8 +3,10 @@ const cors = require("cors");
 const app = express();
 const bcrypt = require("bcrypt")
 const session = require("express-session")
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5100;
 const token = "4A5N2Tj0a4y5a2sChOrVeEeN0s1p2u3n"
+app.use(require("cookie-parser")());
+
 app.use(cors({
   origin:"https://covassfront.netlify.app", credentials:true,
 }))
