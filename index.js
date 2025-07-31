@@ -146,7 +146,7 @@ app.post("/api/login", async (req, res) => {
 })
 
 app.get("/api/check-auth", (req, res) => {
-  req.session.user = { Email: user.Email };
+ 
   if (req.session.user) {
     res.json({ loggedIn: true, user: req.session.user });
     console.log(req.session)
