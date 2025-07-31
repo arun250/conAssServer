@@ -8,7 +8,7 @@ const token = "4A5N2Tj0a4y5a2sChOrVeEeN0s1p2u3n"
 app.use(require("cookie-parser")());
 
 app.use(cors({
-  origin:"*", credentials:true,
+  origin:"https://covassfront.netlify.app", credentials:true,
 }))
 app.use(express.json())
 
