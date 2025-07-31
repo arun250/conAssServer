@@ -19,7 +19,7 @@ app.use(session({
   cookie: {
     httpOnly:true,
     sameSite: "None",
-    secure:true,
+    secure:false,
     maxAge: 1000 * 60 * 30
   }
 }));
@@ -133,7 +133,7 @@ app.post("/api/login", async (req, res) => {
     req.session.user = { Email: user.Email };
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, 
+      secure: false, 
       sameSite: "None", 
     });
     
